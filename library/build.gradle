@@ -12,9 +12,20 @@ repositories {
 	mavenCentral()
 }
 
+processResources {
+	from('src/main/java') {
+		include '**/*.properties'
+		include '**/*.xml'
+		duplicatesStrategy DuplicatesStrategy.EXCLUDE
+	}
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.mybatis:mybatis:3.5.7'
+	implementation 'log4j:log4j:1.2.17'
+	runtimeOnly 'com.h2database:h2'
 }
 
 test {

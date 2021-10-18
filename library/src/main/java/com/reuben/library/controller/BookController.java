@@ -1,6 +1,11 @@
 package com.reuben.library.controller;
 
 
+import com.reuben.library.dao.BookDao;
+import com.reuben.library.pojo.Book;
+import com.reuben.library.utils.MybatisUtils;
+import com.sun.org.apache.xerces.internal.xs.StringList;
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResultUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,37 +16,31 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 public class BookController {
 
-    @Autowired
-
+    //@Autowired
     @GetMapping("/hello")
     public String sayHello(){
         return "hello world";
     }
 
-    @Autowired
+    //@Autowired
     @GetMapping("/bookList")
-    public Map<String, Object> bookList(){
-         Map<String, Object> map = new HashMap<String, Object>();
-         map.put("三国演义", "123");
-         return  map;
+    public Map<Integer, Object> bookList(){
+        //获取
+        SqlSession sqlSession = MybatisUtils.getSqlSession();
+        //执行
+        BookDao mapper = sqlSession.getMapper(BookDao.class);
+        List<Book> bookList = mapper.getBookList();
+        Map<Integer, Object> map = bookList.stream().collect(Collectors.toMap(Book::getId, Book->Book));
+        //关闭
+        sqlSession.close();
+        return map;
     }
 
-    @GetMapping("/saynum")
-    public String sayNumber(@RequestParam(value = "id")int id){
-        return "数字"+id;
-    }
 
-    @GetMapping("/factorial")
-    public String factorial(@RequestParam(value = "num")int num){
-        int temp = 1;
-        for(int i = 1; i <= num; i++){
-            temp *= i;
-        }
-        return "阶乘结果为"+temp;
-    }
 
 }
