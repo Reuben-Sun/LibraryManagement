@@ -1,10 +1,14 @@
 package com.reuben.library.pojo;
 
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+
 public class Book {
     //实体类
     private int id;
     private String name;
     private String author;
+
 
     public Book() {
     }

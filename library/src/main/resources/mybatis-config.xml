@@ -17,5 +17,6 @@
     </environments>
     <mappers>
         <mapper resource="com/reuben/library/mapper/BookMapper.xml"/>
+        <mapper resource="com/reuben/library/mapper/PersonMapper.xml"/>
     </mappers>
 </configuration>
