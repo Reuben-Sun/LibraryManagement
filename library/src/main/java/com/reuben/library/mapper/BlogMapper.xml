@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.reuben.library.dao.BlogDao">
+    <resultMap id="BlogResult" type="com.reuben.library.pojo.Blog">
+        <id column="id" property="id"/>
+        <result column="author" property="author"/>
+        <collection property="bowens" ofType="com.reuben.library.pojo.Bowen" resultMap="BowenResult" columnPrefix="bowen_"/>
+    </resultMap>
+
+    <resultMap id="BowenResult" type="com.reuben.library.pojo.Bowen">
+        <id column="id" property="id"/>
+        <result column="content" property="content"/>
+        <association property="blog" resultMap="BlogResult" columnPrefix="blog_"/>
+        <collection property="comment" ofType="java.lang.String">
+            <constructor>
+                <arg column="comment"/>
+            </constructor>
+        </collection>
+    </resultMap>
+
+    <select id="getBlogList" resultMap="BlogResult">
+        SELECT BLOG.ID as id,
+               AUTHOR as author,
+               B.ID as bowen_id,
+               B.CONTENT as bowen_content,
+               C.CONTENT as bowen_comment
+        FROM BLOG
+            LEFT JOIN BOWEN B on BLOG.ID = B.BLOG_ID
+            LEFT JOIN COMMENT C on B.ID = C.BOWEN_ID
+    </select>
+    <select id="getBowen" resultMap="BowenResult">
+        SELECT BOWEN.ID as id,
+               BOWEN.CONTENT as content,
+               B.ID as blog_id,
+               AUTHOR as blog_author,
+               C.CONTENT as comment
+        FROM BOWEN
+            LEFT JOIN BLOG B on B.ID = BOWEN.BLOG_ID
+            LEFT JOIN COMMENT C on BOWEN.ID = C.BOWEN_ID
+        WHERE BOWEN.ID = #{id}
+    </select>
+
+
+</mapper>

@@ -18,5 +18,6 @@
     <mappers>
         <mapper resource="com/reuben/library/mapper/BookMapper.xml"/>
         <mapper resource="com/reuben/library/mapper/PersonMapper.xml"/>
+        <mapper resource="com/reuben/library/mapper/BlogMapper.xml"/>
     </mappers>
 </configuration>
