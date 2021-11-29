@@ -7,7 +7,7 @@
         select * from books
     </select>
 
-    <resultMap id="bookListResult" type="java.util.Map">
+    <resultMap id="bookListResult" type="com.reuben.library.pojo.Book">
         <id property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="author" column="author"/>
@@ -18,7 +18,7 @@
     <select id="getBookByName" resultMap="bookListResult">
         select * from books where name LIKE concat('%',#{name},'%')
     </select>
-    <select id="getBookById" resultType="map">
+    <select id="getBookById" resultMap="bookListResult">
         select * from books where id=#{id}
     </select>
 <!--    <select id="getBookList2" resultType="map">-->
@@ -53,8 +53,8 @@
     </resultMap>
 
     <insert id="addBook" >
-        insert into books (ID, NAME, AUTHOR, PUBLISHER, VERSION)
-        values (#{id}, #{name}, #{author}, #{publisher}, #{version})
+        insert into books (NAME, AUTHOR, PUBLISHER, VERSION)
+        values (#{name}, #{author}, #{publisher}, #{version})
     </insert>
 
     <delete id="deleteBookById">
