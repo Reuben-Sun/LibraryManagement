@@ -3,10 +3,18 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.reuben.library.dao.BookDao">
-    <select id="getBookList" resultType="com.reuben.library.pojo.Book">
+    <select id="getBookList" resultMap="bookListResult">
         select * from books
     </select>
-    <select id="getBookById" resultType="com.reuben.library.pojo.Book">
+    <resultMap id="bookListResult" type="java.util.Map">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="author" column="author"/>
+        <result property="publish" column="publich"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <select id="getBookById" resultType="map">
         select * from books where id=#{id}
     </select>
     <select id="getBookList2" resultType="map">
@@ -16,7 +24,9 @@
         select * from person where id=1
     </select>
     <select id="getBookNameList" resultMap="bookNameMap">
-        select id,name
+        select id as id,
+               name as name,
+               author as author
         from books
 
     </select>
@@ -24,5 +34,26 @@
     <resultMap id="bookNameMap" type="java.util.Map">
         <id property="id" column="id"/>
         <result property="name" column="name"/>
+        <result property="author" column="author"/>
+       <discriminator javaType="int" column="id">
+           <case value="1" resultMap="bookResult"/>
+           <case value="2" resultMap="bookResult2"/>
+       </discriminator>
     </resultMap>
+    <resultMap id="bookResult" type="java.util.Map">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="author" column="author"/>
+    </resultMap>
+    <resultMap id="bookResult2" type="java.util.Map">
+        <id property="id" column="id"/>
+        <result property="name" column="name" javaType="String" typeHandler="com.reuben.library.utils.BlogHandler"/>
+    </resultMap>
+
+    <insert id="addBook" >
+        insert into books (ID, NAME, AUTHOR, PUBLISHER, VERSION)
+        values (#{id}, #{name}, #{author}, #{publisher}, #{version})
+    </insert>
+
+
 </mapper>

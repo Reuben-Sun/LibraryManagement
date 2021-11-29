@@ -32,16 +32,14 @@ public class BookController {
     }
 
     //@Autowired
-    //获取书单
+    //获取完整书单
     @GetMapping("/bookList")
-    public Map<Integer, Object> bookList(){
+    public Map<String, Object> bookList(){
         //获取
         SqlSession sqlSession = MybatisUtils.getSqlSession();
         //执行
         BookDao mapper = sqlSession.getMapper(BookDao.class);
-        List<Book> bookList = mapper.getBookList();
-        Map<Integer, Object> map = bookList.stream().collect(Collectors.toMap(Book::getId, Book->Book));
-        //关闭
+        Map<String, Object> map = mapper.getBookList();
         sqlSession.close();
         return map;
     }
@@ -73,16 +71,27 @@ public class BookController {
 
     //按ID查询
     @GetMapping("/bookListById")
-    public Map<Integer, Object> bookListById(int id){
+    public Map<String, Object> bookListById(int id){
         //获取
         SqlSession sqlSession = MybatisUtils.getSqlSession();
         //执行
         BookDao mapper = sqlSession.getMapper(BookDao.class);
-        List<Book> bookList = mapper.getBookById(id);
-        Map<Integer, Object> map = bookList.stream().collect(Collectors.toMap(Book::getId, Book->Book));
-        //关闭
+        Map<String, Object> map = mapper.getBookById(id);
         sqlSession.close();
         return map;
     }
 
+    //插入一本书
+    @GetMapping("/newBook")
+    public int addNewBook(Integer id, String name, String author, String publisher, String version){
+        SqlSession sqlSession = MybatisUtils.getSqlSession();
+        //执行
+        BookDao mapper = sqlSession.getMapper(BookDao.class);
+
+        int x = mapper.addBook(id, name, author, publisher, version);
+//        int x = mapper.addBook(11, "hhh", "lll", "ooo", "qqq");
+        sqlSession.commit();
+        sqlSession.close();
+        return x;
+    }
 }
