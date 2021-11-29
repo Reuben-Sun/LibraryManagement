@@ -1,4 +1,30 @@
 <template>
+  <div>
+    <div class="margin">
+      <div class="header_bar">
+        <va-popover
+            placement="right"
+            message="孙政，张文迪，陈涵"
+            class="member_hover"
+        >
+          <va-button>小组成员</va-button>
+        </va-popover>
+        <div class="search_container">
+          <va-input
+              class="input"
+              v-model="value"
+              label="Name"
+              placeholder="Label"
+          />
+          <va-button class="button" icon="search" @click="searchByName()"/>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+    <h1 class="header">图书管理系统</h1>
+    <br>
+  </div>
   <div class="margintable">
     <va-data-table :items="items" :columns="columns" :striped="true" :hoverable="true">
       <template #cell(action)="{ rowIndex: index }">
@@ -44,12 +70,6 @@
           label="Version"
           placeholder="Label"
       />
-      <va-input
-          class="mb-4"
-          v-model="value"
-          label="Name"
-          placeholder="Label"
-      />
     </va-modal>
 
 
@@ -62,6 +82,8 @@ import {VaDataTable} from "vuestic-ui";
 import {VaButton} from "vuestic-ui";
 import {VaModal} from "vuestic-ui";
 import axios from "axios";
+import {VaPopover} from "vuestic-ui";
+import {VaInput} from "vuestic-ui";
 
 export default {
   name: 'BookDataTable',
@@ -69,44 +91,11 @@ export default {
     VaDataTable,
     VaButtonGroup,
     VaButton,
-    VaModal
+    VaModal,
+    VaPopover,
+    VaInput
   },
   data() {
-
-    // const items = [
-    //   {
-    //     id: '0',
-    //     name: 'xxx',
-    //     author: '',
-    //     publisher: '',
-    //     action: '',
-    //     version: ''
-    //   },
-    //   {
-    //     id: '1',
-    //     name: 'eee',
-    //     author: '',
-    //     publisher: '',
-    //     action: '',
-    //     version: ''
-    //   },
-    //   {
-    //     id: '2',
-    //     name: 'sss',
-    //     author: '',
-    //     publisher: '',
-    //     action: '',
-    //     version: ''
-    //   },
-    //   {
-    //     id: '3',
-    //     name: '444',
-    //     author: '',
-    //     publisher: '',
-    //     action: '',
-    //     version: ''
-    //   }
-    // ]
 
     const columns = [
       {key: 'id', verticalAlign: "center"},
@@ -121,6 +110,7 @@ export default {
     return {
       items: [],
       columns,
+      value: '',
       deleteMessage: "",
       showDeleteConfirm: false,
       currentId: -1,
@@ -186,15 +176,73 @@ export default {
           this.$vaToast.init("删除失败")
         }
       })
-
     },
+    searchByName(){
+      let name = this.value;
+
+        axios.get("/api/bookListByName", {
+        params: {
+          name: name
+        }
+      }).then(response => {
+          if (response.status === 200) {
+            console.log(name)
+            this.items = response.data
+            console.log(response.data)
+            this.$vaToast.init("修改成功")
+          } else {
+            this.$vaToast.init("修改失败")
+          }
+        }).catch(err => {
+          this.$vaToast.init("修改失败")
+        })
+    }
 
   }
+
 }
 </script>
 
 
-<style>
+<style lang="less">
+.header {
+  text-align: center;
+  font-size: 40px;
+}
+
+.margin {
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.header_bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  .member_hover {
+    flex: 0 0 auto;
+  }
+
+  .search_container {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    .input {
+      flex: 0 0 auto;
+      width: 40vw;
+    }
+
+    .button {
+      flex: 0 0 auto;
+    }
+  }
+
+}
 .margintable {
   margin-left: 30px;
   margin-right: 30px;
