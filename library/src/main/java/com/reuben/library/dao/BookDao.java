@@ -9,11 +9,13 @@ import java.util.Map;
 public interface BookDao {
     @MapKey("name")
     Map<String, Object> getBookList();
+    @MapKey("name")
+    Map<String, Object> getBookByName(String name);
     Map<String, Object> getBookById(int id);
-    Map<String, Object> getBookList2();
+    //Map<String, Object> getBookList2();
     @MapKey("name")
     Map<String, Object> getBookNameList();
-    Map<String, Object> getPersonList();
+//    Map<String, Object> getPersonList();
     int addBook(Integer id, String name, String author, String publisher, String version);
     int deleteBookById(Integer id);
     int updateBook(Integer id, String name, String author, String publisher, String version);

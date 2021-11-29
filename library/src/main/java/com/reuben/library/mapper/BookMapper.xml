@@ -6,6 +6,7 @@
     <select id="getBookList" resultMap="bookListResult">
         select * from books
     </select>
+
     <resultMap id="bookListResult" type="java.util.Map">
         <id property="id" column="id"/>
         <result property="name" column="name"/>
@@ -14,15 +15,16 @@
         <result property="version" column="version"/>
     </resultMap>
 
+    <select id="getBookByName" resultMap="bookListResult">
+        select * from books where name LIKE concat('%',#{name},'%')
+    </select>
     <select id="getBookById" resultType="map">
         select * from books where id=#{id}
     </select>
-    <select id="getBookList2" resultType="map">
-        select * from books where id=1
-    </select>
-    <select id="getPersonList" resultType="map">
-        select * from person where id=1
-    </select>
+<!--    <select id="getBookList2" resultType="map">-->
+<!--        select * from books where id=1-->
+<!--    </select>-->
+
     <select id="getBookNameList" resultMap="bookNameMap">
         select id as id,
                name as name,
