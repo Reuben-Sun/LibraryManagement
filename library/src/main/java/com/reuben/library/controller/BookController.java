@@ -57,17 +57,17 @@ public class BookController {
 //        return map;
 //    }
     //获取书名单
-    @GetMapping("/bookNameList")
-    public Map<String, Object> bookNameList(){
-        //获取
-        SqlSession sqlSession = MybatisUtils.getSqlSession();
-        //执行
-        BookDao mapper = sqlSession.getMapper(BookDao.class);
-
-        Map<String, Object> map = mapper.getBookNameList();
-        sqlSession.close();
-        return map;
-    }
+//    @GetMapping("/bookNameList")
+//    public Map<String, Object> bookNameList(){
+//        //获取
+//        SqlSession sqlSession = MybatisUtils.getSqlSession();
+//        //执行
+//        BookDao mapper = sqlSession.getMapper(BookDao.class);
+//
+//        Map<String, Object> map = mapper.getBookNameList();
+//        sqlSession.close();
+//        return map;
+//    }
 
     //按ID查询
     @GetMapping("/bookListById")
