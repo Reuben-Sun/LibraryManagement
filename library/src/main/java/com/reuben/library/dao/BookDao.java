@@ -15,4 +15,6 @@ public interface BookDao {
     Map<String, Object> getBookNameList();
     Map<String, Object> getPersonList();
     int addBook(Integer id, String name, String author, String publisher, String version);
+    int deleteBookById(Integer id);
+    int updateBook(Integer id, String name, String author, String publisher, String version);
 }

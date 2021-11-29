@@ -94,4 +94,30 @@ public class BookController {
         sqlSession.close();
         return x;
     }
+
+    //删除一本书
+    @GetMapping("/deleteBook")
+    public int deleteBookById(Integer id){
+        SqlSession sqlSession = MybatisUtils.getSqlSession();
+        //执行
+        BookDao mapper = sqlSession.getMapper(BookDao.class);
+
+        int x = mapper.deleteBookById(id);
+        sqlSession.commit();
+        sqlSession.close();
+        return x;
+    }
+
+    //更新一本书
+    @GetMapping("/updateBook")
+    public int updateBookById(Integer id, String name, String author, String publisher, String version){
+        SqlSession sqlSession = MybatisUtils.getSqlSession();
+        //执行
+        BookDao mapper = sqlSession.getMapper(BookDao.class);
+
+        int x = mapper.updateBook(id, name, author, publisher, version);
+        sqlSession.commit();
+        sqlSession.close();
+        return x;
+    }
 }

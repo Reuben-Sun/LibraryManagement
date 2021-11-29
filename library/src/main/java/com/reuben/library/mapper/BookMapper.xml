@@ -55,5 +55,16 @@
         values (#{id}, #{name}, #{author}, #{publisher}, #{version})
     </insert>
 
+    <delete id="deleteBookById">
+        delete from books where id=#{id}
+    </delete>
 
+    <update id="updateBook">
+        update books set
+            name = #{name},
+            author = #{author},
+            publisher = #{publisher},
+            version = #{version}
+        where id = #{id}
+    </update>
 </mapper>
