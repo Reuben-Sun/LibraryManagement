@@ -1,20 +1,17 @@
 <script>
 import BookDataTable from "./components/BookDataTable.vue";
-import Header from "./components/Header.vue";
 
 
 export default {
   name:'App',
   components: {
     BookDataTable,
-    Header
   }
 }
 </script>
 
 <template>
   <div>
-    <Header></Header>
     <BookDataTable></BookDataTable>
   </div>
 </template>
