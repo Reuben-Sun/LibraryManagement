@@ -11,12 +11,13 @@
         </va-popover>
         <div class="search_container">
           <va-input
+              id ="nameinput"
               class="input"
               v-model="value"
               label="Name"
               placeholder="Label"
           />
-          <va-button class="button" icon="search"/>
+          <va-button class="button" icon="search" @click="searchByName()"/>
         </div>
       </div>
     </div>
@@ -31,12 +32,38 @@
 import {VaButton} from "vuestic-ui";
 import {VaPopover} from "vuestic-ui";
 import {VaInput} from "vuestic-ui";
+import axios from "axios";
 
 export default {
   name: "Header",
   data() {
     return {
       value: '',
+      items: [],
+    }
+  },
+  methods: {
+
+    // async refresh() {
+    //   const response = await axios.get("/api/bookList")
+    //   this.items = response.data
+    // },
+    searchByName() {
+      var name = this.value
+      const aaaaa =  axios.get("/api/bookListByName", {
+        params: {
+          name: this.name
+        }
+      }).then(response => {
+        if (response.status === 200) {
+          this.items = aaaaa.data
+          this.$vaToast.init("删除成功")
+        } else {
+          this.$vaToast.init("删除失败")
+        }
+      }).catch(err => {
+        this.$vaToast.init("删除失败")
+      })
     }
   },
   components: {
