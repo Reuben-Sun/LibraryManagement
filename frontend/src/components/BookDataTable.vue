@@ -34,9 +34,39 @@
         </va-button-group>
       </template>
     </va-data-table>
+    <va-button  icon="add" @click="handleAddClick()"/>
+    <va-modal ref="addConfirm" stateful title="添加书籍"
+              @cancel="cancelAdd"  @ok="addBook">
+      <va-input
+          class="mb-4"
+          v-model="this.newbookname"
+          label="Name"
+          placeholder="Label"
+      />
+      <va-input
+          class="mb-4"
+          v-model="this.newbookauthor"
+          label="Author"
+          placeholder="Label"
+      />
+      <va-input
+          class="mb-4"
+          v-model="this.newbookpublisher"
+          label="Publisher"
+          placeholder="Label"
+      />
+      <va-input
+          class="mb-4"
+          v-model="this.newbookversion"
+          label="Version"
+          placeholder="Label"
+      />
+    </va-modal>
+
     <va-modal ref="deleteConfirm" stateful title="确认"
               @cancel="cancelDelete" :message="deleteMessage" @ok="deleteBook">
     </va-modal>
+
     <va-modal ref="changeConfirm" stateful title="更改信息"
               @cancel="cancelChange" @ok="changeBook">
       <va-input
@@ -107,6 +137,7 @@ export default {
       {key: 'action', label: "Action", verticalAlign: "center"},
     ]
 
+
     return {
       items: [],
       columns,
@@ -115,6 +146,10 @@ export default {
       showDeleteConfirm: false,
       currentId: -1,
       currentBook: {},
+      newbookname:'',
+      newbookauthor:'',
+      newbookversion:'',
+      newbookpublisher:''
     }
   },
   mounted() {
@@ -135,6 +170,13 @@ export default {
       this.$refs.changeConfirm.show();
       this.currentId = book.id;
       this.currentBook = book;
+    },
+    handleAddClick() {
+      this.$refs.addConfirm.show();
+    },
+
+    cancelAdd() {
+
     },
 
     cancelDelete() {
@@ -169,14 +211,56 @@ export default {
       if (this.currentId < 0) {
         return;
       }
-      axios.get("").then(response => {
-        if (response.status === 200) {
-          this.$vaToast.init("删除成功")
-        } else {
-          this.$vaToast.init("删除失败")
+      let id= this.currentId;
+      let name=this.currentBook.name;
+      let author=this.currentBook.author;
+      let version=this.currentBook.version;
+      let publisher=this.currentBook.publisher;
+
+      axios.get("/api/updateBook", {
+        params: {
+          id: id,
+          name:name,
+          author:author,
+          publisher:publisher,
+          version:version
         }
+      }).then(response => {
+        if (response.status === 200) {
+          this.getinfo();
+          this.$vaToast.init("修改成功")
+        } else {
+          this.$vaToast.init("修改失败")
+        }
+      }).catch(err => {
+        this.$vaToast.init("修改失败")
       })
     },
+
+    addBook() {
+      let name=this.newbookname;
+      let author=this.newbookauthor;
+      let version=this.newbookversion;
+      let publisher=this.newbookpublisher;
+      axios.get("/api/newBook", {
+        params: {
+          name:name,
+          author:author,
+          publisher:publisher,
+          version:version
+        }
+      }).then(response => {
+        if (response.status === 200) {
+          this.getinfo();
+          this.$vaToast.init("添加成功")
+        } else {
+          this.$vaToast.init("添加失败")
+        }
+      }).catch(err => {
+        this.$vaToast.init("添加失败")
+      })
+    },
+
     searchByName(){
       let name = this.value;
 
